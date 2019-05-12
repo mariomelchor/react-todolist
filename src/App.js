@@ -12,7 +12,10 @@ class App extends React.Component {
     this.handleChange = this.handleChange.bind(this);
 
     this.state = {
-      items: [],
+      items: {
+        "todo": [],
+        "completed": [],
+      },
       value: ''
     }
   }
@@ -35,7 +38,7 @@ class App extends React.Component {
   additem(event) {
     event.preventDefault();
 
-    let items = this.state.items;
+    let items = this.state.items.todo;
     let value = this.state.value;
 
     if (value.trim === '') {
@@ -46,23 +49,33 @@ class App extends React.Component {
     items.push(this.state.value);
       
     this.setState({
-      items,
+      items: {
+        "todo": items,
+        "completed": this.state.items.completed,
+      },
       value: '',
     });
 
-    localStorage.setItem('todoItems', JSON.stringify(items));
+    localStorage.setItem('todoItems', JSON.stringify(this.state.items));
 
   }
 
   deleteItem(item){
     let items = this.state.items;
-    items.splice(item,1);
+    let index = items.todo.indexOf(item);
+
+    items.todo.splice(index,1);
+    items.completed.push(item);
+
 
     this.setState({
-      items,
+      items: {
+        "todo": items.todo,
+        "completed": items.completed
+      },
     });
 
-    localStorage.setItem('todoItems', JSON.stringify(items));
+    localStorage.setItem('todoItems', JSON.stringify(this.state.items));
   }
 
   handleChange(event) {
@@ -76,7 +89,10 @@ class App extends React.Component {
     return (
       <div className="App">
         <Input additem={this.additem} value={this.state.value} handleChange={this.handleChange} />
-        <List items={this.state.items} delete={this.deleteItem} />
+
+        Todo Items
+        <List items={this.state.items.todo} delete={this.deleteItem} />
+
       </div>
     );
   }
