@@ -8,6 +8,7 @@ class App extends React.Component {
     super(props);
 
     this.additem = this.additem.bind(this);
+    this.deleteItem = this.deleteItem.bind(this);
     this.handleChange = this.handleChange.bind(this);
 
     this.state = {
@@ -35,7 +36,27 @@ class App extends React.Component {
     event.preventDefault();
 
     let items = this.state.items;
+    let value = this.state.value;
+
+    if (value.trim === '') {
+      alert('this is empty');
+      return;
+    }
+
     items.push(this.state.value);
+      
+    this.setState({
+      items,
+      value: '',
+    });
+
+    localStorage.setItem('todoItems', JSON.stringify(items));
+
+  }
+
+  deleteItem(item){
+    let items = this.state.items;
+    items.splice(item,1);
 
     this.setState({
       items,
@@ -43,7 +64,6 @@ class App extends React.Component {
 
     localStorage.setItem('todoItems', JSON.stringify(items));
   }
-
 
   handleChange(event) {
     this.setState({
@@ -56,7 +76,7 @@ class App extends React.Component {
     return (
       <div className="App">
         <Input additem={this.additem} value={this.state.value} handleChange={this.handleChange} />
-        <List items={this.state.items} />
+        <List items={this.state.items} delete={this.deleteItem} />
       </div>
     );
   }
