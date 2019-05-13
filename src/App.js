@@ -9,6 +9,7 @@ class App extends React.Component {
 
     this.additem = this.additem.bind(this);
     this.deleteItem = this.deleteItem.bind(this);
+    this.completeItem = this.completeItem.bind(this);
     this.handleChange = this.handleChange.bind(this);
 
     this.state = {
@@ -60,13 +61,12 @@ class App extends React.Component {
 
   }
 
-  deleteItem(item){
+  completeItem(item){
     let items = this.state.items;
     let index = items.todo.indexOf(item);
 
     items.todo.splice(index,1);
     items.completed.push(item);
-
 
     this.setState({
       items: {
@@ -76,6 +76,14 @@ class App extends React.Component {
     });
 
     localStorage.setItem('todoItems', JSON.stringify(this.state.items));
+  }
+
+  deleteItem(items, item){
+
+    // items.splice(item,1);
+
+    // console.log(items);
+    
   }
 
   handleChange(event) {
@@ -91,7 +99,10 @@ class App extends React.Component {
         <Input additem={this.additem} value={this.state.value} handleChange={this.handleChange} />
 
         Todo Items
-        <List items={this.state.items.todo} delete={this.deleteItem} />
+        { this.state.items.todo && <List items={this.state.items.todo} delete={this.deleteItem} complete={this.completeItem} list="todo" /> }
+
+        Completed Items
+        { this.state.items.completed && <List items={this.state.items.completed} delete={this.deleteItem} complete={this.completeItem} list="completed" /> } 
 
       </div>
     );
