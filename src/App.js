@@ -14,7 +14,12 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 const styles = {
   root: {
     flexGrow: 1,
+    paddingTop: '50px',
   },
+  search: {
+    padding: '40px',
+    marginBottom: '20px',
+  }
 };
 
 class App extends React.Component {
@@ -161,14 +166,14 @@ class App extends React.Component {
       <div className={`${classes.root} App`}>
       <CssBaseline />
      
-      <Grid container spacing={24} justify="center" alignItems="center">
-        <Grid item xs={4}>
+      <Grid container justify="center" alignItems="center">
+        <Grid item xs={12} md={6} lg={4}>
           
-      <Paper square className={classes.root}>
+      <Paper className={classes.search} square>
         <Input additem={this.additem} value={this.state.value} handleChange={this.handleChange} />
       </Paper>
 
-      <Paper square className={classes.root}>
+      <Paper square>
         <Tabs
           value={this.state.tab}
           onChange={this.tabChange}
