@@ -8,7 +8,8 @@ class App extends React.Component {
     super(props);
 
     this.additem = this.additem.bind(this);
-    this.deleteItem = this.deleteItem.bind(this);
+    this.deleteTodoItem = this.deleteTodoItem.bind(this);
+    this.deleteCompletedItem = this.deleteCompletedItem.bind(this);
     this.completeItem = this.completeItem.bind(this);
     this.handleChange = this.handleChange.bind(this);
 
@@ -78,12 +79,34 @@ class App extends React.Component {
     localStorage.setItem('todoItems', JSON.stringify(this.state.items));
   }
 
-  deleteItem(items, item){
+  deleteTodoItem(items, item){
 
-    // items.splice(item,1);
+    items.splice(item,1);
 
-    // console.log(items);
+    this.setState({
+      items: {
+        "todo": items,
+        "completed": this.state.items.completed,
+      },
+    });
+
+    localStorage.setItem('todoItems', JSON.stringify(this.state.items));
     
+  }
+
+  deleteCompletedItem(items, item){
+
+    items.splice(item,1);
+
+    this.setState({
+      items: {
+        "todo": this.state.items.todo,
+        "completed": items ,
+      },
+    });
+
+    localStorage.setItem('todoItems', JSON.stringify(this.state.items));
+
   }
 
   handleChange(event) {
@@ -99,10 +122,10 @@ class App extends React.Component {
         <Input additem={this.additem} value={this.state.value} handleChange={this.handleChange} />
 
         Todo Items
-        { this.state.items.todo && <List items={this.state.items.todo} delete={this.deleteItem} complete={this.completeItem} list="todo" /> }
+        { this.state.items.todo && <List items={this.state.items.todo} delete={this.deleteTodoItem} complete={this.completeItem} list="todo" /> }
 
         Completed Items
-        { this.state.items.completed && <List items={this.state.items.completed} delete={this.deleteItem} complete={this.completeItem} list="completed" /> } 
+        { this.state.items.completed && <List items={this.state.items.completed} delete={this.deleteCompletedItem} complete={this.completeItem} list="completed" /> } 
 
       </div>
     );
