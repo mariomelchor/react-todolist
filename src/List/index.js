@@ -1,16 +1,51 @@
 import React from 'react';
+import PropTypes from 'prop-types';
+import { withStyles } from '@material-ui/core/styles';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
+import ListItemText from '@material-ui/core/ListItemText';
+import Checkbox from '@material-ui/core/Checkbox';
+import IconButton from '@material-ui/core/IconButton';
+import Delete from '@material-ui/icons/Delete';
 
-function List(props) {
+const styles = theme => ({
+  root: {
+    width: '100%',
+    backgroundColor: theme.palette.background.paper,
+  },
+});
 
-  return(
-    <ul>
-      {props.items.map((item, index) => {
-        return <li key={index}><input type="checkbox" checked={props.list === 'completed' ? true : false} onClick={() => props.complete(item)} />{item} 
-        <button onClick={() => props.delete(props.items,item)}>Delete</button>
-        </li>
-      })}
-    </ul>
-  );
+class CheckboxList extends React.Component {
+
+  render() {
+    const { classes } = this.props;
+
+    return (
+      <List className={classes.root}>
+        {this.props.items.map((item, index) => (
+          <ListItem key={index} role={undefined} dense button>
+            <Checkbox
+              checked={this.props.list === 'completed' ? true : false}
+              tabIndex={-1}
+              disableRipple
+              onClick={() => this.props.complete(item)}
+            />
+            <ListItemText primary={item} />
+            <ListItemSecondaryAction>
+              <IconButton aria-label="Comments" onClick={() => this.props.delete(this.props.items,item)}>
+                <Delete />
+              </IconButton>
+            </ListItemSecondaryAction>
+          </ListItem>
+        ))}
+      </List>
+    );
+  }
 }
 
-export default List;
+CheckboxList.propTypes = {
+  classes: PropTypes.object.isRequired,
+};
+
+export default withStyles(styles)(CheckboxList);

@@ -19,25 +19,20 @@ const styles = {
   iconButton: {
     padding: 10,
   },
-  divider: {
-    width: 1,
-    height: 28,
-    margin: 4,
-  },
 };
 
 function Input(props) {
   const { classes } = props;
 
   return (
-    <Paper className={classes.root} elevation={1}>
-      <form onSubmit={props.additem}>
+    <form onSubmit={props.additem}>
+      <Paper className={classes.root} elevation={1}>
         <InputBase className={classes.input} placeholder="Add To-Do Item" value={props.value} onChange={props.handleChange} />
         <IconButton type="submit" className={classes.iconButton} aria-label="Search">
           <AddBox />
         </IconButton>
-      </form>
-    </Paper>
+      </Paper>
+    </form>
   );
 }
 

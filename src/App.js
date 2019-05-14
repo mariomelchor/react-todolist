@@ -1,5 +1,5 @@
 import React from 'react';
-import List from './List';
+import CheckboxList from './List';
 import Input from './Input';
 import PropTypes from 'prop-types';
 import Paper from '@material-ui/core/Paper';
@@ -8,12 +8,12 @@ import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import CheckCircle from '@material-ui/icons/CheckCircle';
 import Ballot from '@material-ui/icons/Ballot';
-import './App.css';
+import Grid from '@material-ui/core/Grid';
+import CssBaseline from '@material-ui/core/CssBaseline';
 
 const styles = {
   root: {
     flexGrow: 1,
-    maxWidth: 500,
   },
 };
 
@@ -158,8 +158,16 @@ class App extends React.Component {
     const { tab } = this.state;
 
     return (
-      <div className="App">
-      <Input additem={this.additem} value={this.state.value} handleChange={this.handleChange} />
+      <div className={`${classes.root} App`}>
+      <CssBaseline />
+     
+      <Grid container spacing={24} justify="center" alignItems="center">
+        <Grid item xs={4}>
+          
+      <Paper square className={classes.root}>
+        <Input additem={this.additem} value={this.state.value} handleChange={this.handleChange} />
+      </Paper>
+
       <Paper square className={classes.root}>
         <Tabs
           value={this.state.tab}
@@ -172,12 +180,14 @@ class App extends React.Component {
           <Tab icon={<CheckCircle />} label="COMPLETED" />
         </Tabs>
 
-        { tab === 0 && <List items={this.state.items.todo} delete={this.deleteTodoItem} complete={this.completeItem} list="todo" /> }
+        { tab === 0 && <CheckboxList items={this.state.items.todo} delete={this.deleteTodoItem} complete={this.completeItem} list="todo" /> }
 
         
-        { tab === 1 && <List items={this.state.items.completed} delete={this.deleteCompletedItem} complete={this.unCompleteItem} list="completed" /> } 
+        { tab === 1 && <CheckboxList items={this.state.items.completed} delete={this.deleteCompletedItem} complete={this.unCompleteItem} list="completed" /> } 
 
       </Paper>
+      </Grid>
+      </Grid>
       </div>
     );
   }
