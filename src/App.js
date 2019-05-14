@@ -1,7 +1,21 @@
 import React from 'react';
 import List from './List';
 import Input from './Input';
+import PropTypes from 'prop-types';
+import Paper from '@material-ui/core/Paper';
+import { withStyles } from '@material-ui/core/styles';
+import Tabs from '@material-ui/core/Tabs';
+import Tab from '@material-ui/core/Tab';
+import CheckCircle from '@material-ui/icons/CheckCircle';
+import Ballot from '@material-ui/icons/Ballot';
 import './App.css';
+
+const styles = {
+  root: {
+    flexGrow: 1,
+    maxWidth: 500,
+  },
+};
 
 class App extends React.Component {
   constructor(props){
@@ -19,7 +33,8 @@ class App extends React.Component {
         "todo": [],
         "completed": [],
       },
-      value: ''
+      value: '',
+      tab: 0,
     }
   }
 
@@ -37,6 +52,10 @@ class App extends React.Component {
       items,
     });
   }
+
+  tabChange = (event, tab) => {
+    this.setState({ tab });
+  };
 
   additem(event) {
     event.preventDefault();
@@ -135,19 +154,37 @@ class App extends React.Component {
 
   render() {
 
+    const { classes } = this.props;
+    const { tab } = this.state;
+
     return (
       <div className="App">
-        <Input additem={this.additem} value={this.state.value} handleChange={this.handleChange} />
+      <Input additem={this.additem} value={this.state.value} handleChange={this.handleChange} />
+      <Paper square className={classes.root}>
+        <Tabs
+          value={this.state.tab}
+          onChange={this.tabChange}
+          variant="fullWidth"
+          indicatorColor="secondary"
+          textColor="secondary"
+        >
+          <Tab icon={<Ballot />} label="TO-DO" />
+          <Tab icon={<CheckCircle />} label="COMPLETED" />
+        </Tabs>
 
-        Todo Items
-        { this.state.items.todo && <List items={this.state.items.todo} delete={this.deleteTodoItem} complete={this.completeItem} list="todo" /> }
+        { tab === 0 && <List items={this.state.items.todo} delete={this.deleteTodoItem} complete={this.completeItem} list="todo" /> }
 
-        Completed Items
-        { this.state.items.completed && <List items={this.state.items.completed} delete={this.deleteCompletedItem} complete={this.unCompleteItem} list="completed" /> } 
+        
+        { tab === 1 && <List items={this.state.items.completed} delete={this.deleteCompletedItem} complete={this.unCompleteItem} list="completed" /> } 
 
+      </Paper>
       </div>
     );
   }
 }
 
-export default App;
+App.propTypes = {
+  classes: PropTypes.object.isRequired,
+};
+
+export default withStyles(styles)(App);
