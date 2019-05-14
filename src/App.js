@@ -10,6 +10,7 @@ class App extends React.Component {
     this.additem = this.additem.bind(this);
     this.deleteTodoItem = this.deleteTodoItem.bind(this);
     this.deleteCompletedItem = this.deleteCompletedItem.bind(this);
+    this.unCompleteItem = this.unCompleteItem.bind(this);
     this.completeItem = this.completeItem.bind(this);
     this.handleChange = this.handleChange.bind(this);
 
@@ -79,6 +80,23 @@ class App extends React.Component {
     localStorage.setItem('todoItems', JSON.stringify(this.state.items));
   }
 
+  unCompleteItem(item){
+    let items = this.state.items;
+    let index = items.todo.indexOf(item);
+
+    items.completed.splice(index,1);
+    items.todo.push(item);
+
+    this.setState({
+      items: {
+        "todo": items.todo,
+        "completed": items.completed
+      },
+    });
+
+    localStorage.setItem('todoItems', JSON.stringify(this.state.items));
+  }
+
   deleteTodoItem(items, item){
 
     items.splice(item,1);
@@ -125,7 +143,7 @@ class App extends React.Component {
         { this.state.items.todo && <List items={this.state.items.todo} delete={this.deleteTodoItem} complete={this.completeItem} list="todo" /> }
 
         Completed Items
-        { this.state.items.completed && <List items={this.state.items.completed} delete={this.deleteCompletedItem} complete={this.completeItem} list="completed" /> } 
+        { this.state.items.completed && <List items={this.state.items.completed} delete={this.deleteCompletedItem} complete={this.unCompleteItem} list="completed" /> } 
 
       </div>
     );
