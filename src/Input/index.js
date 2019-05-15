@@ -7,6 +7,9 @@ import IconButton from '@material-ui/core/IconButton';
 import AddBox from '@material-ui/icons/AddBox';
 
 const styles = {
+  form: {
+    marginBottom: '20px',
+  },
   root: {
     padding: '2px 4px',
     display: 'flex',
@@ -25,9 +28,9 @@ function Input(props) {
   const { classes } = props;
 
   return (
-    <form onSubmit={props.additem}>
+    <form className={classes.form} onSubmit={props.additem}>
       <Paper className={classes.root} elevation={1}>
-        <InputBase className={classes.input} placeholder="Add To-Do Item" value={props.value} onChange={props.handleChange} />
+        <InputBase className={classes.input} placeholder="Add To-Do Item" value={props.value} onChange={props.handleChange} required={true}/>
         <IconButton type="submit" className={classes.iconButton} aria-label="Search">
           <AddBox />
         </IconButton>

@@ -10,16 +10,13 @@ import CheckCircle from '@material-ui/icons/CheckCircle';
 import Ballot from '@material-ui/icons/Ballot';
 import Grid from '@material-ui/core/Grid';
 import CssBaseline from '@material-ui/core/CssBaseline';
+import AppBar from '@material-ui/core/AppBar';
 
 const styles = {
   root: {
     flexGrow: 1,
     paddingTop: '50px',
   },
-  search: {
-    padding: '40px',
-    marginBottom: '20px',
-  }
 };
 
 class App extends React.Component {
@@ -68,7 +65,7 @@ class App extends React.Component {
     let items = this.state.items.todo;
     let value = this.state.value;
 
-    if (value.trim === '') {
+    if (value.trim() === '') {
       alert('this is empty');
       return;
     }
@@ -166,33 +163,33 @@ class App extends React.Component {
       <div className={`${classes.root} App`}>
       <CssBaseline />
      
-      <Grid container justify="center" alignItems="center">
-        <Grid item xs={12} md={6} lg={4}>
+        <Grid container justify="center" alignItems="center">
+          <Grid item xs={12} md={6} lg={4}>
+            
+            <Input className={classes.search} additem={this.additem} value={this.state.value} handleChange={this.handleChange} />
+
+          <Paper square>
+          <AppBar position="static" color="default">
+            <Tabs
+              value={this.state.tab}
+              onChange={this.tabChange}
+              variant="fullWidth"
+              indicatorColor="primary"
+              textColor="primary"
+            >
+              <Tab icon={<Ballot />} label="TO-DO" />
+              <Tab icon={<CheckCircle />} label="COMPLETED" />
+            </Tabs>
+            </AppBar>
+
+            { tab === 0 && <CheckboxList items={this.state.items.todo} delete={this.deleteTodoItem} complete={this.completeItem} list="todo" /> }
+
           
-      <Paper className={classes.search} square>
-        <Input additem={this.additem} value={this.state.value} handleChange={this.handleChange} />
-      </Paper>
+            { tab === 1 && <CheckboxList items={this.state.items.completed} delete={this.deleteCompletedItem} complete={this.unCompleteItem} list="completed" /> } 
 
-      <Paper square>
-        <Tabs
-          value={this.state.tab}
-          onChange={this.tabChange}
-          variant="fullWidth"
-          indicatorColor="secondary"
-          textColor="secondary"
-        >
-          <Tab icon={<Ballot />} label="TO-DO" />
-          <Tab icon={<CheckCircle />} label="COMPLETED" />
-        </Tabs>
-
-        { tab === 0 && <CheckboxList items={this.state.items.todo} delete={this.deleteTodoItem} complete={this.completeItem} list="todo" /> }
-
-        
-        { tab === 1 && <CheckboxList items={this.state.items.completed} delete={this.deleteCompletedItem} complete={this.unCompleteItem} list="completed" /> } 
-
-      </Paper>
-      </Grid>
-      </Grid>
+          </Paper>
+        </Grid>
+        </Grid>
       </div>
     );
   }

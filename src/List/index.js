@@ -28,8 +28,8 @@ class CheckboxList extends React.Component {
             <Checkbox
               checked={this.props.list === 'completed' ? true : false}
               tabIndex={-1}
-              disableRipple
               onClick={() => this.props.complete(item)}
+              color="primary"
             />
             <ListItemText primary={item} />
             <ListItemSecondaryAction>
