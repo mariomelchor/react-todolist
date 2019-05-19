@@ -32,7 +32,7 @@ class CheckboxList extends React.Component {
             />
             <ListItemText primary={item} />
             <ListItemSecondaryAction>
-              <IconButton aria-label="Comments" onClick={() => this.props.delete(this.props.items,item)}>
+              <IconButton aria-label="Comments" onClick={() => this.props.delete(this.props.items,item,this.props.list)}>
                 <Delete />
               </IconButton>
             </ListItemSecondaryAction>

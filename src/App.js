@@ -65,10 +65,9 @@ class App extends React.Component {
 
   // Saving items to local storage and setting state
   saveItems(obj){
-    const {items} = obj;
-    localStorage.setItem('todoItems', JSON.stringify(items));
+    localStorage.setItem('todoItems', JSON.stringify(obj));
 
-    this.setState(items);
+    this.setState(obj);
   }
 
   // Handles adding an item 
@@ -154,7 +153,7 @@ class App extends React.Component {
     
   }
 
-  // Deleteing Completed Item
+  // Deleting Completed Item
   deleteCompletedItem(items, item){
     items.splice(item,1);
 
