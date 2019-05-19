@@ -1,6 +1,6 @@
 import React from 'react';
 import CheckboxList from './List';
-import Input from './Input';
+import TodoInput from './TodoInput';
 import PropTypes from 'prop-types';
 import Paper from '@material-ui/core/Paper';
 import { withStyles } from '@material-ui/core/styles';
@@ -41,24 +41,37 @@ class App extends React.Component {
   }
 
   componentDidMount(){
-
+    // Load items from  Local Storage or Component State.
     let items = localStorage.getItem('todoItems') ? JSON.parse(localStorage.getItem('todoItems')) : this.state.items;
     
     if( !items ){
       return;
     }
 
-    localStorage.setItem('todoItems', JSON.stringify(items));
-    
+    this.saveItems(items);  
+  }
+
+  // Handles Tab Change
+  tabChange = (event, tab) => {
+    this.setState({ tab });
+  }
+
+  // Handle Input Change
+  handleChange(event) {
     this.setState({
-      items,
+      value: event.target.value
     });
   }
 
-  tabChange = (event, tab) => {
-    this.setState({ tab });
-  };
+  // Saving items to local storage and setting state
+  saveItems(obj){
+    const {items} = obj;
+    localStorage.setItem('todoItems', JSON.stringify(items));
 
+    this.setState(items);
+  }
+
+  // Handles adding an item 
   additem(event) {
     event.preventDefault();
 
@@ -70,20 +83,25 @@ class App extends React.Component {
       return;
     }
 
-    items.push(this.state.value);
-      
-    this.setState({
+    items.push(value);
+
+    const newItems = {
       items: {
         "todo": items,
         "completed": this.state.items.completed,
       },
       value: '',
-    });
+    }
+      
+    this.saveItems(newItems);
 
-    localStorage.setItem('todoItems', JSON.stringify(this.state.items));
+    this.setState({
+      value: newItems.value
+    })
 
   }
 
+  // Handles completing an item
   completeItem(item){
     let items = this.state.items;
     let index = items.todo.indexOf(item);
@@ -91,16 +109,18 @@ class App extends React.Component {
     items.todo.splice(index,1);
     items.completed.push(item);
 
-    this.setState({
+    const newItems = {
       items: {
         "todo": items.todo,
         "completed": items.completed
       },
-    });
+    }
 
-    localStorage.setItem('todoItems', JSON.stringify(this.state.items));
+    this.saveItems(newItems);
+
   }
 
+  // Removig from complete
   unCompleteItem(item){
     let items = this.state.items;
     let index = items.todo.indexOf(item);
@@ -108,50 +128,45 @@ class App extends React.Component {
     items.completed.splice(index,1);
     items.todo.push(item);
 
-    this.setState({
+    const newItems = {
       items: {
         "todo": items.todo,
         "completed": items.completed
       },
-    });
+    }
 
-    localStorage.setItem('todoItems', JSON.stringify(this.state.items));
+    this.saveItems(newItems);
+
   }
 
+  // Deleting an Item
   deleteTodoItem(items, item){
-
     items.splice(item,1);
 
-    this.setState({
+    const newItems = {
       items: {
         "todo": items,
-        "completed": this.state.items.completed,
+        "completed":  this.state.items.completed,
       },
-    });
+    }
 
-    localStorage.setItem('todoItems', JSON.stringify(this.state.items));
+    this.saveItems(newItems);
     
   }
 
+  // Deleteing Completed Item
   deleteCompletedItem(items, item){
-
     items.splice(item,1);
 
-    this.setState({
+    const newItems = {
       items: {
         "todo": this.state.items.todo,
-        "completed": items ,
+        "completed": items,
       },
-    });
+    }
 
-    localStorage.setItem('todoItems', JSON.stringify(this.state.items));
+    this.saveItems(newItems);
 
-  }
-
-  handleChange(event) {
-    this.setState({
-      value: event.target.value
-    });
   }
 
   render() {
@@ -161,34 +176,31 @@ class App extends React.Component {
 
     return (
       <div className={`${classes.root} App`}>
-      <CssBaseline />
+        <CssBaseline />
      
         <Grid container justify="center" alignItems="center">
-          <Grid item xs={12} md={6} lg={4}>
+          <Grid item xs={10} md={6} lg={4}>
             
-            <Input className={classes.search} additem={this.additem} value={this.state.value} handleChange={this.handleChange} />
+            <TodoInput className={classes.search} additem={this.additem} value={this.state.value} handleChange={this.handleChange} />
 
-          <Paper square>
-          <AppBar position="static" color="default">
-            <Tabs
-              value={this.state.tab}
-              onChange={this.tabChange}
-              variant="fullWidth"
-              indicatorColor="primary"
-              textColor="primary"
-            >
-              <Tab icon={<Ballot />} label="TO-DO" />
-              <Tab icon={<CheckCircle />} label="COMPLETED" />
-            </Tabs>
-            </AppBar>
+            <Paper>
+              <AppBar position="static" color="default">
+                <Tabs
+                  value={this.state.tab}
+                  onChange={this.tabChange}
+                  variant="fullWidth"
+                  indicatorColor="primary"
+                  textColor="primary">
+                  <Tab icon={<Ballot />} label="TO-DO" />
+                  <Tab icon={<CheckCircle />} label="COMPLETED" />
+                </Tabs>
+              </AppBar>
 
-            { tab === 0 && <CheckboxList items={this.state.items.todo} delete={this.deleteTodoItem} complete={this.completeItem} list="todo" /> }
+              { tab === 0 && <CheckboxList items={this.state.items.todo} delete={this.deleteTodoItem} complete={this.completeItem} list="todo" /> }
+              { tab === 1 && <CheckboxList items={this.state.items.completed} delete={this.deleteCompletedItem} complete={this.unCompleteItem} list="completed" /> } 
 
-          
-            { tab === 1 && <CheckboxList items={this.state.items.completed} delete={this.deleteCompletedItem} complete={this.unCompleteItem} list="completed" /> } 
-
-          </Paper>
-        </Grid>
+            </Paper>
+          </Grid>
         </Grid>
       </div>
     );

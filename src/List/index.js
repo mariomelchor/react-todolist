@@ -24,11 +24,10 @@ class CheckboxList extends React.Component {
     return (
       <List className={classes.root}>
         {this.props.items.map((item, index) => (
-          <ListItem key={index} role={undefined} dense button>
+          <ListItem key={index} role={undefined} onClick={() => this.props.complete(item)} dense button>
             <Checkbox
               checked={this.props.list === 'completed' ? true : false}
               tabIndex={-1}
-              onClick={() => this.props.complete(item)}
               color="primary"
             />
             <ListItemText primary={item} />

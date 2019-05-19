@@ -24,12 +24,12 @@ const styles = {
   },
 };
 
-function Input(props) {
+function ToDoInput(props) {
   const { classes } = props;
 
   return (
     <form className={classes.form} onSubmit={props.additem}>
-      <Paper className={classes.root} elevation={1}>
+      <Paper className={classes.root}>
         <InputBase className={classes.input} placeholder="Add To-Do Item" value={props.value} onChange={props.handleChange} required={true}/>
         <IconButton type="submit" className={classes.iconButton} aria-label="Search">
           <AddBox />
@@ -39,8 +39,8 @@ function Input(props) {
   );
 }
 
-Input.propTypes = {
+ToDoInput.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(Input);
+export default withStyles(styles)(ToDoInput);
