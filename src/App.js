@@ -80,6 +80,9 @@ class App extends React.Component {
     if (value.trim() === '') {
       alert('this is empty');
       return;
+    } else if ( items.includes(value) ) {
+      alert('already in array');
+      return;
     }
 
     items.push(value);
