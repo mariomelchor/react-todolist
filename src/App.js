@@ -17,6 +17,11 @@ const styles = {
     flexGrow: 1,
     paddingTop: '50px',
   },
+  logo: {
+    display: 'block',
+    maxWidth: '100%',
+    margin: '0 auto',
+  }
 };
 
 class App extends React.Component {
@@ -93,12 +98,14 @@ class App extends React.Component {
         "completed": this.state.items.completed,
       },
       value: '',
+      tab: 0
     }
       
     this.saveItems(newItems);
 
     this.setState({
-      value: newItems.value
+      value: newItems.value,
+      tab: newItems.tab
     })
 
   }
@@ -181,8 +188,13 @@ class App extends React.Component {
         <CssBaseline />
      
         <Grid container justify="center" alignItems="center">
+
+          <Grid item xs={12}>
+            <img className={classes.logo} src="todo-list-logo.png" alt="To-Do List" />
+          </Grid>
+
           <Grid item xs={10} md={6} lg={4}>
-            
+
             <TodoInput className={classes.search} additem={this.additem} value={this.state.value} handleChange={this.handleChange} />
 
             <Paper>
